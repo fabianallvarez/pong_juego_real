@@ -1,56 +1,63 @@
 import pygame
+import time
 
 """
-    -Algo de herencia
+  - algo de herencia:
 
-    -color, ancho, alto
+  - color, ancho, alto
+  - hay cosas fijas como el color y el tamaño
 
-    -Metodo moverse: solo hacia arriba y hacia abajo 
-    -Hay cosas fijas como el color y el tamaño
+  - método moverse: solo hacia arriba y hacia abajo
+  - método de chocar: límite para no salirse de la pantalla
 
-    -Metodo de chocar: limite para no salirse de la pantalla
-    -metodo para interactuar con la pelota???
-    """
+  - método para interactuar con la pelota???
+"""
+
 class Paleta(pygame.Rect):
     pass
 
 
 class Pong:
 
-    _ALTO = 600
-    _ANCHO = 800
+    _ANCHO = 640
+    _ALTO = 480
     _MARGEN_LATERAL = 40
 
     _ANCHO_PALETA = 5
-    _ALTO_PALETA = _ALTO/ 5
+    _ALTO_PALETA = _ALTO / 5
 
 
     def __init__(self):
         print("Construyendo un objeto pong")
-        pygame.init() 
+        pygame.init()
         self.pantalla = pygame.display.set_mode((self._ANCHO, self._ALTO))
 
-        self.jugador1 = Paleta
-         (self._MARGEN_LATERAL,
-         (self._ALTO-self._ALTO_PALETA)/2,
-         self._ANCHO_PALETA,
-         self._ALTO_PALETA)
+        self.jugador1 = Paleta(
+            self._MARGEN_LATERAL,               # coordenada x (left)
+            (self._ALTO-self._ALTO_PALETA)/2,   # coordenada y (top)
+            self._ANCHO_PALETA,                 # ancho (width)
+            self._ALTO_PALETA)                  # alto (height)
 
         self.jugador2 = Paleta(
             self._ANCHO-self._MARGEN_LATERAL-self._ANCHO_PALETA,
-         (self._ALTO-self._ALTO_PALETA)/2,
-         self,_ANCHO_PALETA,
-         
-          40)
-
+            (self._ALTO-self._ALTO_PALETA)/2,
+            self._ANCHO_PALETA,
+            self._ALTO_PALETA)
 
     def bucle_principal(self):
-        print("Estoy en el bucle principal")     
+        print("Estoy en el bucle principal")
+        salir = False
         while True:
-            pygame.draw.rect(self.pantalla, (255 ,255 ,255), self.jugador1)
-            pygame.draw.rect(self.pantalla, (255 ,255 ,255), self.jugador2)
-            pygame.display.flip()
+            for evento in pygame.event.get():
+                if evento.type == pygame.KEYDOWN:
+                    if evento.key == pygame.K_ESCAPE:
+                        return
+                if evento.key == pygame.QUIT:
+                    salir = True
 
+            pygame.draw.rect(self.pantalla, (255, 255, 255), self.jugador1)
+            pygame.draw.rect(self.pantalla, (255, 255, 255), self.jugador2)
+            pygame.display.flip()
 
 if __name__ == "__main__":
     juego = Pong()
